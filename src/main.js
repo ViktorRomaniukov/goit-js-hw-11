@@ -7,44 +7,44 @@ import { searchImages } from './js/pixabay-api.js';
 import { imageTemplate } from './js/render-functions.js';
 
 const refs = {
-  formInput: document.querySelector('.js-create-form'),
-  imgList: document.querySelector('.img-list'),
-  loader: document.querySelector('.loader'),
+    formInput: document.querySelector('.js-create-form'),
+    imgList: document.querySelector('.img-list'),
+    loader: document.querySelector('.loader'),
 };
 
 let lightbox = new SimpleLightbox('.img-list a', {
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-  captionDelay: 250,
+    captionsData: 'alt',
+    captionPosition: 'bottom',
+    captionDelay: 250,
 });
 
 refs.formInput.addEventListener('submit', e => {
-  e.preventDefault();
-  const userValue = e.target.elements.imgTitle.value.trim();
-  refs.imgList.innerHTML = '';
-  refs.loader.style.display = 'block';
+    e.preventDefault();
+    const userValue = e.target.elements.imgTitle.value.trim();
+    refs.imgList.innerHTML = '';
+    refs.loader.style.display = 'block';
 
-  searchImages(userValue)
+    searchImages(userValue)
     .then(response => {
-      refs.loader.style.display = 'none';
-      if (response.data.hits.length === 0) {
+        refs.loader.style.display = 'none';
+        if (response.data.hits.length === 0) {
         iziToast.warning({
-          message:
+            message:
             'Sorry, there are no images matching your search query. Please try again!',
-          position: 'topRight',
+            position: 'topRight',
         });
         return;
-      }
-      renderImgs(response.data);
+        }
+        renderImgs(response.data);
     })
     .catch(error => {
-      refs.loader.style.display = 'none';
+        refs.loader.style.display = 'none';
     });
-  e.target.reset();
+    e.target.reset();
 });
 
 function renderImgs(images) {
-  const markup = imageTemplate(images);
-  refs.imgList.insertAdjacentHTML('beforeend', markup);
-  lightbox.refresh();
+    const markup = imageTemplate(images);
+    refs.imgList.insertAdjacentHTML('beforeend', markup);
+    lightbox.refresh();
 }
